@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Models;
+
+use DateTimeInterface;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Membership extends BaseModel
+{
+    use HasFactory;
+    use SoftDeletes;
+
+    protected $table = 'membership';
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
+    protected $casts = [
+
+    ];
+
+    protected $fillable = [
+        'user_id',
+        'image',
+        'fullname',
+        'phone',
+        'address',
+        'is_online',
+        'status',
+        'created_at',
+    ];
+
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    public function users(){
+        return $this->hasOne(User::class,'id','user_id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($model) {
+
+        });
+    }
+}
